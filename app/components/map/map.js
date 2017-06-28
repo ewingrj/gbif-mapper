@@ -58,13 +58,15 @@
                     var lat = resource[_this.latColumn];
                     var lng = L.Util.wrapNum(resource[_this.lngColumn], [0,360], true); // center on pacific ocean
 
-                    var marker = L.marker([lat, lng]);
+                    if (typeof lat === 'number' & typeof lng === 'number') {
+                        var marker = L.marker([lat, lng]);
 
-                    if (typeof popupContentCallback === 'function') {
-                        marker.bindPopup(popupContentCallback(resource));
+                        if (typeof popupContentCallback === 'function') {
+                            marker.bindPopup(popupContentCallback(resource));
+                        }
+
+                        _this._markers.push(marker);
                     }
-
-                    _this._markers.push(marker);
                 });
 
                 this._clusterLayer.addLayers(this._markers);

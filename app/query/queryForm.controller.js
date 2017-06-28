@@ -31,7 +31,7 @@
         function queryJson() {
             usSpinnerService.spin('query-spinner');
 
-            queryService.queryJson(queryParams.build(), 0, 200000)
+            queryService.queryJson(queryParams.build(), 0, 10000)
                 .then(queryJsonSuccess)
                 .catch(queryJsonFailed)
                 .finally(queryJsonFinally);
@@ -54,8 +54,8 @@
 
         function getCountryCodes() {
             queryService.countryCodes()
-                .then(function(response) {
-                    vm.countryCodes = response.data;
+                .then(function(codes) {
+                    vm.countryCodes = codes;
                 }, function() {
                     alerts.error('error fetching countryCodes');
                 });

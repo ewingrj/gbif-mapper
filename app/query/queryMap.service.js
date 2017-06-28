@@ -21,11 +21,10 @@
         return new QueryMap('decimalLatitude', 'decimalLongitude');
 
         function generatePopupContent(resource) {
-            return "<strong>GUID</strong>:  " + resource.bcid + "<br>" +
-                "<strong>Genus</strong>:  " + resource.genus + "<br>" +
+            return "<strong>Genus</strong>:  " + resource.genus + "<br>" +
                 "<strong>Species</strong>:  " + resource.species + "<br>" +
-                "<strong>Locality, Country</strong>:  " + resource.locality + ", " + resource.country + "<br>";
-                // "<a href='" + $state.href('sample', {bcid: resource.bcid}) + "' target='_blank'>Sample details</a>";
+                "<strong>Locality, Country</strong>:  " + resource.locality + ", " + resource.country + "<br>" +
+                "<a href='http://www.gbif.org/occurrence/" + resource.key + "' target='_blank'>Occurrence details</a>";
         }
     }
 })();

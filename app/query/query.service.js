@@ -17,12 +17,7 @@
 
         function queryJson(query, page, limit) {
             alerts.removeTmp();
-            return $http({
-                method: 'GET',
-                url: "http://api.gbif.org/v1/occurrence/search?" + limit + "&page=" + page,
-                params: query,
-                keepJson: true
-            })
+            return $http.get("http://api.gbif.org/v1/occurrence/search?limit=" + limit + "&offset=" + page * (limit + 1) + "&" + query)
                 .then(queryJsonComplete);
 
             function queryJsonComplete(response) {
@@ -41,7 +36,7 @@
                         alerts.info("No results found.")
                     }
 
-                    results.data = response.data.content;
+                    results.data = response.data.results;
                 }
 
                 return results;
@@ -49,7 +44,19 @@
         }
 
         function countryCodes() {
-            return $http.get('query/CountryCodes.json');
+            return $http.get('http://api.gbif.org/v1/enumeration/country')
+                .then(function(response) {
+                    var codes = [];
+
+                    angular.forEach(response.data, function(c) {
+                        codes.push({
+                            'name': c.title,
+                            'code': c.iso2
+                            });
+                    });
+
+                    return codes;
+                });
         }
     }
 })();

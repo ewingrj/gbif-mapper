@@ -1,5 +1,6 @@
 (function () {
     'use strict';
 
-    angular.module('map.query', ['ngRoute', 'angularSpinner', 'map.map', 'map.alerts', 'sly', 'ui.bootstrap.showErrors']);
+    angular.module('map.query', ['ngRoute', 'angularSpinner', 'map.map', 'map.alerts', 'map.filters.html', 'sly',
+        'ui.bootstrap.showErrors']);
 })();

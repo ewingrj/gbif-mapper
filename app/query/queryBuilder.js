@@ -9,7 +9,6 @@
     function QueryBuilder() {
 
         function QueryBuilder() {
-            this.source = [];
             this.queryString = "";
         }
 
@@ -27,7 +26,7 @@
                 if (this._isEmpty()) {
                     this.queryString = "q=*";
                 }
-                return new Query(this.queryString);
+                return String(this.queryString);
             },
 
             _isEmpty: function() {
@@ -36,10 +35,6 @@
         };
 
         return QueryBuilder;
-
-        function Query(queryString) {
-            this.queryString = queryString;
-        }
     }
 
 })();
