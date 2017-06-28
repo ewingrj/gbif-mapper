@@ -19,16 +19,21 @@
              * @param mapId the id of the the div container for the map
              */
             init: function (mapId) {
+                var startBounds = [
+                    [5.499550, -167.276413], //Southwest
+                    [83.162102, -52.233040]  //Northeast
+                ];
+
                 this._map = L.map(mapId, {
                     center: [0, 0],
-                    zoom: 1,
+                    zoom: 0,
                     closePopupOnClick: false,
                     maxBoundsViscocity: .5
-                });
+                }).fitBounds(startBounds);
 
                 // fill screen with map, roughly 360 degrees of longitude
-                var z = this._map.getBoundsZoom([[90, -180], [-90, 180]], true);
-                this._map.setZoom(z);
+                // var z = this._map.getBoundsZoom([90, -180], [-90, 180]], true);
+                // this._map.setZoom(z);
 
                 this._mapTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token={access_token}',
                     {access_token: MAPBOX_TOKEN});
@@ -42,6 +47,19 @@
                 this._usgsTiles = L.tileLayer.wms('https://basemap.nationalmap.gov/arcgis/services/USGSImageryOnly/MapServer/WMSServer', { layers: 0, maxZoom: 8 });
 
                 this._clusterLayer = L.markerClusterGroup({chunkedLoading: true});
+
+                var _this = this;
+                this._map.on('dragstart', function () {
+                    var centerLng = _this._map.getCenter().lng;
+                    // the following is how leaflet internally calculates the max bounds. Leaflet doesn't provide a way
+                    // to bound only the latitude, so we do that here. We set the lng to be bound 3x greater the the center
+                    // and is recalculated upon every dragstart event, which should essentially keep the lng unbound
+                    var nwCorner = [90, centerLng - 1080];
+                    var seCorner = [-90, centerLng + 1080];
+
+
+                    _this._map.setMaxBounds([nwCorner, seCorner]);
+                });
             },
 
             /**
@@ -77,23 +95,19 @@
                     .spin(false);
 
                 if (this._markers.length > 0) {
-                    this._map.fitBounds(this._clusterLayer.getBounds(), {padding:[30, 30]});
+                    // this._map.fitBounds(this._clusterLayer.getBounds(), {padding:[30, 30]});
                 }
 
                 this._map.on('move', this._updateMarkerLocations.bind(this));
+            },
 
-                this._map.on('dragstart', function () {
-                    var centerLng = _this._map.getCenter().lng;
-                    // the following is how leaflet internally calculates the max bounds. Leaflet doesn't provide a way
-                    // to bound only the latitude, so we do that here. We set the lng to be bound 3x greater the the center
-                    // and is recalculated upon every dragstart event, which should essentially keep the lng unbound
-                    var nwCorner = [90, centerLng - 1080];
-                    var seCorner = [-90, centerLng + 1080];
+            addLayer: function(l) {
+                this._map.addLayer(l);
+                this._map.fitBounds(l.getBounds(), {padding:[30, 30]});
+            },
 
-
-                    _this._map.setMaxBounds([nwCorner, seCorner]);
-                });
-
+            removeLayer: function(l) {
+                this._map.removeLayer(l);
             },
 
             satelliteView: function () {

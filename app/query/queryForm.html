@@ -11,11 +11,21 @@
 
         <div ng-show="queryFormVm.moreSearchOptions">
 
+            <div class="form-group" class="dwc-terms">
+                <label class="control-label">Spatial Layer</label>
+                <div class="filters row">
+                    <div class="col-xs-12">
+                        <select ng-model="queryFormVm.spatialLayer" class="form-control input-sm"
+                                ng-options="v as k for (k, v) in queryFormVm.spatialLayers">
+                            <option value="">-- Select a Zoom Layer --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group dwc-terms">
-                <a href="#" ng-click="queryFormVm.showDWC = !queryFormVm.showDWC">
-                    <label class="control-label">Darwin Core Terms</label>
-                </a>
-                <div class="row filters" ng-show="queryFormVm.showDWC">
+                <label class="control-label">Darwin Core Terms</label>
+                <div class="row filters">
                     <div class="col-xs-6">
                         <input ng-model="queryFormVm.params.genus" class="form-control input-sm" type="text"
                                placeholder="Genus"/>

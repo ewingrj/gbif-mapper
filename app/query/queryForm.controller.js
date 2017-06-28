@@ -12,11 +12,12 @@
 
         // select lists
         vm.countryCodes = [];
+        vm.spatialLayers = [];
 
         // view toggles
         vm.moreSearchOptions = false;
         vm.showMap = true;
-        vm.showDWC = true;
+        vm.spatialLayer = undefined;
 
         vm.params = queryParams;
 
@@ -26,6 +27,7 @@
 
         function activate() {
             getCountryCodes();
+            getSpatialLayers();
         }
 
         function queryJson() {
@@ -39,6 +41,10 @@
             function queryJsonSuccess(data) {
                 queryResults.update(data);
                 queryMap.setMarkers(queryResults.data);
+
+                if (vm.spatialLayer) {
+                    queryMap.zoomToLayer(omnivore.wkt.parse(vm.spatialLayer));
+                }
             }
 
             function queryJsonFailed(response) {
@@ -54,10 +60,19 @@
 
         function getCountryCodes() {
             queryService.countryCodes()
-                .then(function(codes) {
+                .then(function (codes) {
                     vm.countryCodes = codes;
-                }, function() {
+                }, function () {
                     alerts.error('error fetching countryCodes');
+                });
+        }
+
+        function getSpatialLayers() {
+            queryService.spatialLayers()
+                .then(function (response) {
+                    vm.spatialLayers = response.data;
+                }, function () {
+                    alerts.error('error fetching spatial layers');
                 });
         }
     }

@@ -10,7 +10,8 @@
 
         var queryService = {
             queryJson: queryJson,
-            countryCodes: countryCodes
+            countryCodes: countryCodes,
+            spatialLayers: spatialLayers
         };
 
         return queryService;
@@ -57,6 +58,10 @@
 
                     return codes;
                 });
+        }
+
+        function spatialLayers() {
+            return $http.get('query/spatialLayers.json');
         }
     }
 })();
