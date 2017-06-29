@@ -4,11 +4,11 @@
     angular.module('map.query')
         .controller('QueryFormController', QueryFormController);
 
-    QueryFormController.$inject = ['queryParams', 'queryService', 'queryResults', 'queryMap', 'usSpinnerService', 'alerts'];
+    QueryFormController.$inject = ['GBIFMapperService', 'queryParams', 'queryService', 'queryMap', 'usSpinnerService', 'alerts'];
 
-    function QueryFormController(queryParams, queryService, queryResults, queryMap, usSpinnerService, alerts) {
-
+    function QueryFormController(GBIFMapperService, queryParams, queryService, queryMap, usSpinnerService, alerts) {
         var vm = this;
+        var _currentLayer = undefined;
 
         // select lists
         vm.countryCodes = [];
@@ -20,6 +20,7 @@
         vm.spatialLayer = undefined;
 
         vm.params = queryParams;
+        vm.map = queryMap;
 
         vm.queryJson = queryJson;
 
@@ -33,25 +34,23 @@
         function queryJson() {
             usSpinnerService.spin('query-spinner');
 
-            queryService.queryJson(queryParams.build(), 0, 10000)
-                .then(queryJsonSuccess)
-                .catch(queryJsonFailed)
-                .finally(queryJsonFinally);
+            if (vm.spatialLayer) {
+                var l = omnivore.wkt.parse(vm.spatialLayer);
+                vm.params.bounds = l.getBounds();
 
-            function queryJsonSuccess(data) {
-                queryResults.update(data);
-                queryMap.setMarkers(queryResults.data);
-
-                if (vm.spatialLayer) {
-                    queryMap.zoomToLayer(omnivore.wkt.parse(vm.spatialLayer));
+                if (_currentLayer && l.getBounds() !== _currentLayer.getBounds()) {
+                    queryMap.removeLayer(_currentLayer);
                 }
+
+                queryMap.addLayer(l);
+                _currentLayer = l;
+
+            } else {
+                vm.params.bounds = null;
             }
 
-            function queryJsonFailed(response) {
-                alerts.error('Failed to load query results');
-                console.log('query-error:', response);
-                vm.queryResults.isSet = false;
-            }
+            GBIFMapperService.query(queryParams.build(), 0)
+                .finally(queryJsonFinally);
 
             function queryJsonFinally() {
                 usSpinnerService.stop('query-spinner');

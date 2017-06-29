@@ -14,8 +14,12 @@
 
         QueryMap.prototype = Object.create(Map.prototype);
 
-        QueryMap.prototype.setMarkers = function (data) {
-            Map.prototype.setMarkers.call(this, data, generatePopupContent);
+        QueryMap.prototype.setMarkers = function (data, zoomTo) {
+            Map.prototype.setMarkers.call(this, data, generatePopupContent, zoomTo);
+        };
+
+        QueryMap.prototype.addMarkers = function (data, zoomTo) {
+            Map.prototype.addMarkers.call(this, data, generatePopupContent, zoomTo);
         };
 
         return new QueryMap('decimalLatitude', 'decimalLongitude');

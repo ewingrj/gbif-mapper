@@ -16,9 +16,9 @@
 
         return queryService;
 
-        function queryJson(query, page, limit) {
+        function queryJson(query, page) {
             alerts.removeTmp();
-            return $http.get("http://api.gbif.org/v1/occurrence/search?limit=" + limit + "&offset=" + page * (limit + 1) + "&" + query)
+            return $http.get("http://api.gbif.org/v1/occurrence/search?limit=300" + "&offset=" + 300*page + "&" + query)
                 .then(queryJsonComplete);
 
             function queryJsonComplete(response) {

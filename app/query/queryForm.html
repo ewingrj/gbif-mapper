@@ -27,8 +27,8 @@
                 <label class="control-label">Darwin Core Terms</label>
                 <div class="row filters">
                     <div class="col-xs-6">
-                        <input ng-model="queryFormVm.params.genus" class="form-control input-sm" type="text"
-                               placeholder="Genus"/>
+                        <!--<input ng-model="queryFormVm.params.genus" class="form-control input-sm" type="text"-->
+                               <!--placeholder="Genus"/>-->
                         <select ng-model="queryFormVm.params.country"
                                 ng-options="c.code as c.name for c in queryFormVm.countryCodes track by c.code"
                                 class="form-control input-sm">
@@ -36,15 +36,15 @@
                         </select>
                     </div>
                     <div class="col-xs-6">
-                        <input ng-model="queryFormVm.params.family" class="form-control input-sm" type="text"
-                               placeholder="Family"/>
+                        <!--<input ng-model="queryFormVm.params.family" class="form-control input-sm" type="text"-->
+                               <!--placeholder="Family"/>-->
                         <input ng-model="queryFormVm.params.locality" class="form-control input-sm" type="text"
                                placeholder="Locality"/>
                     </div>
-                    <div class="col-xs-12">
-                        <input ng-model="queryFormVm.params.species" class="form-control input-sm" type="text"
-                               placeholder="Species"/>
-                    </div>
+                    <!--<div class="col-xs-12">-->
+                        <!--<input ng-model="queryFormVm.params.species" class="form-control input-sm" type="text"-->
+                               <!--placeholder="Species"/>-->
+                    <!--</div>-->
                     <div class="col-xs-12 form-group" show-errors>
                         <span class="control-label">yearCollected</span>
                         <div class="col-xs-4">

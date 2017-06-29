@@ -14,6 +14,7 @@
             data: [],
             isSet: false,
             update: update,
+            append: append,
             clear: clear
         };
 
@@ -22,6 +23,15 @@
         function update(data) {
             angular.extend(queryResults, data);
             queryResults.isSet = true;
+        }
+
+        function append(data) {
+            queryResults.size += data.size;
+            queryResults.data.push(data.data);
+
+            if (!queryResults.total) {
+                queryResults.total = data.total;
+            }
         }
 
         function clear() {

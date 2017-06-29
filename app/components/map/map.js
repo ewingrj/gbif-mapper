@@ -68,13 +68,18 @@
              * & lngColumn
              * @param popupContentCallback the function to call to populate the popup box content. Will be passed the current resource
              */
-            setMarkers: function (data, popupContentCallback) {
+            setMarkers: function (data, popupContentCallback, zoomTo) {
                 this._clearMap();
+                this.addMarkers(data, popupContentCallback, zoomTo);
+                this._map.on('move', this._updateMarkerLocations.bind(this));
+            },
 
+            addMarkers: function(data, popupContentCallback, zoomTo) {
                 var _this = this;
                 angular.forEach(data, function (resource) {
                     var lat = resource[_this.latColumn];
-                    var lng = L.Util.wrapNum(resource[_this.lngColumn], [0,360], true); // center on pacific ocean
+                    // var lng = L.Util.wrapNum(resource[_this.lngColumn], [0,360], true); // center on pacific ocean
+                    var lng = resource[_this.lngColumn];
 
                     if (typeof lat === 'number' & typeof lng === 'number') {
                         var marker = L.marker([lat, lng]);
@@ -94,16 +99,18 @@
                     .setMinZoom(1)
                     .spin(false);
 
-                if (this._markers.length > 0) {
-                    // this._map.fitBounds(this._clusterLayer.getBounds(), {padding:[30, 30]});
+                if (zoomTo && this._markers.length > 0) {
+                    this._map.fitBounds(this._clusterLayer.getBounds(), {padding:[30, 30]});
+                } else {
+                    // hack to get markers to render
+                    // this._map.setZoom(this._map.getZoom() - 1, {animate: false});
+                    // this._map.setZoom(this._map.getZoom() + 1, {animate: false});
                 }
-
-                this._map.on('move', this._updateMarkerLocations.bind(this));
             },
 
             addLayer: function(l) {
                 this._map.addLayer(l);
-                this._map.fitBounds(l.getBounds(), {padding:[30, 30]});
+                this._map.fitBounds(l.getBounds(), {padding: [30, 30]});
             },
 
             removeLayer: function(l) {
