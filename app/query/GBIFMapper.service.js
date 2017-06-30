@@ -17,7 +17,7 @@
         function query(query, page) {
             return _queryJson(query, page, true)
                 .then(function(results) {
-                    var toFetch = (results.totalElements <= 10000) ? results.totalElements : 10000; //200k is max fetch depth
+                    var toFetch = (results.totalElements <= 50000) ? results.totalElements : 50000; //200k is max fetch depth
 
                     if (results.size < toFetch) {
                         var numRequests = Math.floor(toFetch / results.size);
@@ -30,8 +30,8 @@
 
                         alerts.info('Loading more results...');
 
-                        if (toFetch === 3000) {
-                            alerts.warning('result set is limited to 3000, narrow your search to view all results');
+                        if (toFetch === 50000) {
+                            alerts.warning('result set is limited to 50000, narrow your search to view all results');
                         }
 
                         $q.all(promises)

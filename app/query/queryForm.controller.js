@@ -4,9 +4,9 @@
     angular.module('map.query')
         .controller('QueryFormController', QueryFormController);
 
-    QueryFormController.$inject = ['GBIFMapperService', 'queryParams', 'queryService', 'queryMap', 'usSpinnerService', 'alerts'];
+    QueryFormController.$inject = ['GBIFMapperService', 'queryParams', 'queryService', 'queryMap', 'queryResults', 'usSpinnerService', 'alerts'];
 
-    function QueryFormController(GBIFMapperService, queryParams, queryService, queryMap, usSpinnerService, alerts) {
+    function QueryFormController(GBIFMapperService, queryParams, queryService, queryMap, queryResults, usSpinnerService, alerts) {
         var vm = this;
         var _currentLayer = undefined;
 
@@ -27,28 +27,24 @@
         activate();
 
         function activate() {
-            getCountryCodes();
+            // getCountryCodes();
             getSpatialLayers();
         }
 
         function queryJson() {
             usSpinnerService.spin('query-spinner');
 
-            if (vm.spatialLayer) {
-                var l = omnivore.wkt.parse(vm.spatialLayer);
-                vm.params.bounds = l.getBounds();
+            var l = omnivore.wkt.parse(vm.spatialLayer);
+            vm.params.bounds = l.getBounds();
 
-                if (_currentLayer && l.getBounds() !== _currentLayer.getBounds()) {
-                    queryMap.removeLayer(_currentLayer);
-                }
-
-                queryMap.addLayer(l);
-                _currentLayer = l;
-
-            } else {
-                vm.params.bounds = null;
+            if (_currentLayer && l.getBounds() !== _currentLayer.getBounds()) {
+                queryMap.removeLayer(_currentLayer);
             }
 
+            queryMap.addLayer(l);
+            _currentLayer = l;
+
+            queryResults.clear();
             GBIFMapperService.query(queryParams.build(), 0)
                 .finally(queryJsonFinally);
 
@@ -57,14 +53,14 @@
             }
         }
 
-        function getCountryCodes() {
-            queryService.countryCodes()
-                .then(function (codes) {
-                    vm.countryCodes = codes;
-                }, function () {
-                    alerts.error('error fetching countryCodes');
-                });
-        }
+        // function getCountryCodes() {
+        //     queryService.countryCodes()
+        //         .then(function (codes) {
+        //             vm.countryCodes = codes;
+        //         }, function () {
+        //             alerts.error('error fetching countryCodes');
+        //         });
+        // }
 
         function getSpatialLayers() {
             queryService.spatialLayers()

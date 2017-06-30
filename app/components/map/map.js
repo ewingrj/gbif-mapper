@@ -20,8 +20,8 @@
              */
             init: function (mapId) {
                 var startBounds = [
-                    [5.499550, -167.276413], //Southwest
-                    [83.162102, -52.233040]  //Northeast
+                    [2.811371, -168.513794], //Southwest
+                    [71.635993, -48.279419] //Northeast
                 ];
 
                 this._map = L.map(mapId, {
@@ -30,10 +30,6 @@
                     closePopupOnClick: false,
                     maxBoundsViscocity: .5
                 }).fitBounds(startBounds);
-
-                // fill screen with map, roughly 360 degrees of longitude
-                // var z = this._map.getBoundsZoom([90, -180], [-90, 180]], true);
-                // this._map.setZoom(z);
 
                 this._mapTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token={access_token}',
                     {access_token: MAPBOX_TOKEN});

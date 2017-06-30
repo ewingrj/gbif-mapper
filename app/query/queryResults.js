@@ -10,7 +10,7 @@
 
         var queryResults = {
             size: 0,
-            total: 0,
+            totalElements: 0,
             data: [],
             isSet: false,
             update: update,
@@ -26,17 +26,20 @@
         }
 
         function append(data) {
+            queryResults.isSet = true;
             queryResults.size += data.size;
-            queryResults.data.push(data.data);
+            queryResults.data = queryResults.data.concat(data.data);
 
-            if (!queryResults.total) {
-                queryResults.total = data.total;
+            if (!queryResults.totalElements) {
+                queryResults.totalElements = data.totalElements;
             }
         }
 
         function clear() {
             queryResults.data = [];
             queryResults.isSet = false;
+            queryResults.size = 0;
+            queryResults.totalElements = 0;
         }
     }
 })();

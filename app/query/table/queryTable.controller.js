@@ -63,7 +63,7 @@
             }
         }
 
-        $scope.$watch('queryTableVm.queryResults.data', function () {
+        $scope.$watch('queryTableVm.queryResults.size', function () {
             vm.currentPage = 1;
             updatePage();
         });
